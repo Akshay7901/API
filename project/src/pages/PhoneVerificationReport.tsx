@@ -13,6 +13,8 @@ import {
 import CustomerSelector from "../components/CustomerSelector";
 import CustomerDataSection from "../components/CustomerDataSection";
 import PhoneInfoSection from "../components/PhoneInfoSection";
+import ChatWidget from "../components/ChatWidget";
+
 
 const PhoneVerificationReport: React.FC = () => {
   const [selectedCustomerId, setSelectedCustomerId] = useState<string | null>(
@@ -62,33 +64,29 @@ const PhoneVerificationReport: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Hero Section */}
-      <div className="bg-white p-8 rounded-xl shadow-sm border-l-8 border-indigo-500">
-  <div className="mb-6">
-    <h1 className="text-2xl font-semibold text-gray-800 mb-2">
-      Phone Verification Report
-    </h1>
-    <p className="text-gray-600 max-w-2xl">
-      Secure and reliable phone verification system with real-time validation and
-      comprehensive reporting.
-    </p>
-  </div>
-  <div className="flex gap-3">
-    <button
-      onClick={handlePrint}
-      className="bg-indigo-500 text-white px-4 py-2 rounded-md font-medium hover:bg-indigo-600 transition-colors flex items-center"
-    >
-      <Printer className="h-4 w-4 mr-2" />
-      Print
-    </button>
-    <button
-      onClick={handleExport}
-      className="border border-indigo-500 text-indigo-500 px-4 py-2 rounded-md font-medium hover:bg-indigo-50 transition-colors hover:text-white flex items-center"
-    >
-      <Download className="h-4 w-4 mr-2" />
-      Export
-    </button>
-  </div>
-</div>
+      <div className="relative bg-gradient-to-r from-indigo-600 to-blue-500 text-white p-8 rounded-xl shadow-lg overflow-hidden">
+        <div className="absolute inset-0 bg-grid-white/[0.2] bg-[size:20px_20px]" />
+        <div className="relative z-10">
+          <h1 className="text-3xl font-bold sm:text-4xl mb-4">
+            Phone Verification Report
+          </h1>
+          <p className="text-lg text-indigo-100 max-w-2xl">
+            Secure and reliable phone verification system with real-time
+            validation and comprehensive reporting.
+          </p>
+          <div className="mt-6 flex gap-4">
+            <button
+              onClick={handlePrint}
+              className="bg-white text-indigo-600 px-6 py-2 rounded-lg font-medium hover:bg-indigo-50 transition-colors flex items-center"
+            >
+              <Printer className="h-5 w-5 mr-2" />
+              Print Report
+            </button>
+            
+          </div>
+        </div>
+        <div className="absolute right-0 top-0 h-full w-1/3 bg-gradient-to-l from-blue-400/20 to-transparent" />
+      </div>
 
       {/* Features Section */}
       {showFeatures && !selectedCustomerId && (
@@ -137,6 +135,7 @@ const PhoneVerificationReport: React.FC = () => {
               })}
             </nav>
           </div>
+          
         </div>
 
         {selectedCustomerId ? (
@@ -208,6 +207,7 @@ const PhoneVerificationReport: React.FC = () => {
                   </ul>
                 </div>
               </div>
+              
             )}
 
             {activeTab === "settings" && (
@@ -279,8 +279,13 @@ const PhoneVerificationReport: React.FC = () => {
               Add New Customer
             </button>
           </div>
+          
         )}
+
       </div>
+          <ChatWidget />
+              
+
     </div>
   );
 };

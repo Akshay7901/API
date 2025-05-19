@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { ChevronDown, Search, X, UserCircle, Check } from 'lucide-react';
 
 interface CustomerOption {
@@ -9,24 +9,26 @@ interface CustomerOption {
 
 interface CustomerSelectorProps {
   onCustomerChange: (customerId: string | null) => void;
+  defaultCustomerId?: string;
 }
 
-const CustomerSelector: React.FC<CustomerSelectorProps> = ({ onCustomerChange }) => {
+const CustomerSelector: React.FC<CustomerSelectorProps> = ({ onCustomerChange, defaultCustomerId }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCustomer, setSelectedCustomer] = useState<CustomerOption | null>(null);
   const [filteredCustomers, setFilteredCustomers] = useState<CustomerOption[]>([]);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  
+
   // Mock customer data
-  const customerOptions: CustomerOption[] = [
+  const customerOptions: CustomerOption[] = useMemo(() => [
     { id: '1', name: 'Rahul', email: 'rahul@gmail.com' },
-    { id: '2', name: 'Ankit ', email: 'ankit@gmail.com' },
+    { id: '2', name: 'Ankit', email: 'ankit@gmail.com' },
     { id: '3', name: 'Sachin', email: 'sachin@gmail.com' },
     { id: '4', name: 'Rohan', email: 'rohan@gmail.com' },
     { id: '5', name: 'Akshay', email: 'akshay@gmail.com' }
-  ];
-  
+  ], []);
+
+  // Set filtered customers based on search
   useEffect(() => {
     if (searchTerm === '') {
       setFilteredCustomers(customerOptions);
@@ -38,33 +40,43 @@ const CustomerSelector: React.FC<CustomerSelectorProps> = ({ onCustomerChange })
       );
       setFilteredCustomers(filtered);
     }
-  }, [searchTerm]);
-  
+  }, [searchTerm, customerOptions]);
+
+  // Close dropdown on outside click
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsOpen(false);
       }
     }
-    
+
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
-  
+
+  // Set default customer if defaultCustomerId is passed
+  useEffect(() => {
+    if (defaultCustomerId) {
+      const defaultCustomer = customerOptions.find(c => c.id === defaultCustomerId) || null;
+      setSelectedCustomer(defaultCustomer);
+      onCustomerChange(defaultCustomer?.id || null);
+    }
+  }, [defaultCustomerId, customerOptions, onCustomerChange]);
+
   const handleCustomerSelect = (customer: CustomerOption) => {
     setSelectedCustomer(customer);
     setIsOpen(false);
     setSearchTerm('');
     onCustomerChange(customer.id);
   };
-  
+
   const clearSelection = () => {
     setSelectedCustomer(null);
     onCustomerChange(null);
   };
-  
+
   return (
     <div className="relative" ref={dropdownRef}>
       <div
@@ -107,7 +119,7 @@ const CustomerSelector: React.FC<CustomerSelectorProps> = ({ onCustomerChange })
           />
         </div>
       </div>
-      
+
       {isOpen && (
         <div className="absolute z-10 mt-1 w-full bg-white shadow-lg rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm max-h-60">
           <div className="px-3 py-2 border-b border-gray-200">
@@ -125,7 +137,7 @@ const CustomerSelector: React.FC<CustomerSelectorProps> = ({ onCustomerChange })
               />
             </div>
           </div>
-          
+
           {filteredCustomers.length === 0 ? (
             <div className="py-3 px-3 text-gray-500 text-sm text-center">No customers found</div>
           ) : (
