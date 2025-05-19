@@ -18,7 +18,7 @@ const Footer: React.FC = () => {
   </div>
 </div>
         
-        <div className="mt-4 flex justify-center md:mt-0">
+        <div className="mt-4 flex justify-center md:mt-0 md:mr-20">
           <a href="#" className="text-gray-400 hover:text-gray-500">
             <span className="sr-only">Privacy Policy</span>
             <span className="text-sm">Privacy Policy</span>
@@ -31,7 +31,9 @@ const Footer: React.FC = () => {
             <span className="sr-only">Contact</span>
             <span className="text-sm">Contact</span>
           </a>
+          
         </div>
+        
       </div>
     </footer>
   );

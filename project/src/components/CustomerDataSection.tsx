@@ -29,6 +29,7 @@ interface CustomerData {
   lastUpdated: string;
   drivingLicense: string;
   address: CustomerAddress;
+  ageonnetwork: string;
 }
 
 interface CustomerDataSectionProps {
