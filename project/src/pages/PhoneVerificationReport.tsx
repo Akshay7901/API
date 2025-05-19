@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import {
   Search,
-  Download,
   Printer,
   Plus,
   Check,
@@ -14,6 +13,23 @@ import CustomerSelector from "../components/CustomerSelector";
 import CustomerDataSection from "../components/CustomerDataSection";
 import PhoneInfoSection from "../components/PhoneInfoSection";
 import ChatWidget from "../components/ChatWidget";
+
+type PhoneStatus = "verified" | "pending" | "invalid";
+
+interface PhoneRecord {
+  number: string;
+  type: string;
+  status: PhoneStatus;
+  verifiedAt: string | null;
+  carrier: string;
+  countryCode: string;
+}
+
+interface PhoneInfo {
+  primary: PhoneRecord & { portedRecord: string };
+  secondary: PhoneRecord[];
+}
+
 
 
 const PhoneVerificationReport: React.FC = () => {
@@ -32,7 +48,6 @@ const PhoneVerificationReport: React.FC = () => {
   };
 
   const handlePrint = () => window.print();
-  const handleExport = () => alert("Export functionality would go here");
 
   const tabs = [
     { id: "overview", label: "Overview", icon: Shield },
@@ -307,15 +322,15 @@ const mockCustomerData = {
     state: "MEERUT",
     zipCode: "250001",
     country: "Uttar Pradesh",
+    city: "MEERUT",
   },
 };
 
-const mockPhoneInfo = {
+const mockPhoneInfo:PhoneInfo = {
   primary: {
     number: "+919999999999",
     type: "Mobile",
-    status: "verified",
-    verifiedAt: "2024-05-20T14:25:00Z",
+status: "verified" as "verified" | "pending" | "invalid",    verifiedAt: "2024-05-20T14:25:00Z",
     carrier: "Airtel",
     countryCode: "US",
     portedRecord: "1",

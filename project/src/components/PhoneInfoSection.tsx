@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import VerificationStatusBadge from "./VerificationStatusBadge";
 
+type PhoneStatus = "verified" | "pending" | "invalid";
+
 interface PhoneRecord {
   number: string;
   type: string;
-  status: "verified" | "invalid" | "pending";
+  status: PhoneStatus;
   verifiedAt: string | null;
   carrier: string;
   countryCode: string;
